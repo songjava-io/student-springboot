@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap>
+
+	<!-- 게시물 목록 결과 맵 -->
+	<resultMap id="selectBoardListResultMap" class="com.example.domain.Board">
+		<result column="BOARD_SEQ" property="boardSeq" />
+		<result column="TITLE" property="title" />
+		<result column="REG_DATE" property="regDate" />
+	</resultMap>
+	
+	<!-- 게시물 결과 맵 -->
+	<resultMap id="selectBoardDetailResultMap" class="com.example.domain.Board">
+		<result column="BOARD_SEQ" property="boardSeq" />
+		<result column="TITLE" property="title" />
+		<result column="CONTENTS" property="contents" />
+		<result column="REG_DATE" property="regDate" />
+	</resultMap>	
+	
+	<!-- 게시물 목록 조회 쿼리 -->
+	<select id="selectBoardList" resultMap="selectBoardListResultMap">
+		SELECT
+			BOARD_SEQ,
+			TITLE,
+			REG_DATE
+		FROM T_BOARD
+		<!-- query 검색어가 공백이 아닌경우 -->
+		<isNotEmpty property="query">
+		WHERE TITLE LIKE CONCAT('%', CONCAT(#query#, '%'))
+		</isNotEmpty>
+		ORDER BY REG_DATE DESC
+	</select>
+	
+	<!-- 게시물 조회 쿼리 -->
+	<select id="selectBoard" parameterClass="java.lang.String"
+		 resultMap="selectBoardDetailResultMap">
+		SELECT
+			BOARD_SEQ,
+			TITLE,
+			CONTENTS,
+			REG_DATE
+		FROM T_BOARD
+		WHERE BOARD_SEQ = #boardSeq#
+	</select>
+	
+	<insert id="insertBoard">
+		INSERT INTO T_BOARD
+		(
+			TITLE,
+			CONTENTS,
+			REG_DATE
+		)
+		VALUES
+		(
+			#title#,
+			#contents#,
+			NOW()
+		)
+	</insert>
+	
+	<update id="updateBoard">
+		UPDATE T_BOARD
+		SET
+			TITLE = #title#,
+			CONTENTS = #contents#
+		WHERE BOARD_SEQ = #boardSeq#
+	</update>
+	
+	<delete id="deleteBoard">
+		DELETE FROM T_BOARD
+		WHERE BOARD_SEQ = #boardSeq#
+	</delete>
+	
+	
+	
+	
+	
+	
+		
+
+</sqlMap>
