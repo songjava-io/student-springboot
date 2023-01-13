@@ -20,7 +20,7 @@
 	</select>
 	
 	<!-- 게시물 조회 쿼리 -->
-	<select id="selectBoard" parameterType="java.lang.String"
+	<select id="selectBoard" parameterType="int"
 		 resultType="kr.songjava.web.domain.Board">
 		SELECT
 			BOARD_SEQ,

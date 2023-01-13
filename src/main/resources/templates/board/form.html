@@ -9,7 +9,7 @@
 		<form th:action="${board == null ? '/board/save' : '/board/update'}" method="post">
 			
 			<input type="hidden" name="boardSeq"
-				th:if="${board != null" 
+				th:if="${board != null}" 
 				th:value="${board.boardSeq}" />
 			
 			<div class="mb-3">
