@@ -8,7 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -41,5 +43,39 @@ public class BoardController {
 		
 		model.addAttribute("boardList", boardList);
 	}
+	
+	
+	/**
+	 * 등록화면 
+	 */
+	@GetMapping("/{boardSeq}")
+	public String detail(Model model, @PathVariable int boardSeq) {
+		Board board = boardService.selectBoard(boardSeq);
+		Assert.notNull(board, "게시글 정보가 없습니다.");
+		model.addAttribute("board", board);
+		return "/board/detail";
+	}
+	
+	/**
+	 * 등록화면 
+	 */
+	@GetMapping("/form")
+	public void form() {
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

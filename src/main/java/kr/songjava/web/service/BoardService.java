@@ -16,7 +16,7 @@ public class BoardService {
 
 	private final BoardMapper boardMapper;
 	
-	public List<Board> selectBoardList(Map<String, Object> paramMap) throws SQLException {
+	public List<Board> selectBoardList(Map<String, Object> paramMap) {
 		return boardMapper.selectBoardList(paramMap);
 	}
 
@@ -25,7 +25,7 @@ public class BoardService {
 	 * @param boardSeq
 	 * @return
 	 */
-	public Board selectBoard(String boardSeq) throws SQLException {
+	public Board selectBoard(int boardSeq) {
 		return boardMapper.selectBoard(boardSeq);
 	}
 	
@@ -34,7 +34,7 @@ public class BoardService {
 	 * @param board
 	 * @throws SQLException
 	 */
-	public boolean save(Board board) throws SQLException {
+	public boolean save(Board board) {
 		// 게시물 번호로 조회하여 데이가 있는지
 		Board selectBoard = selectBoard(board.getBoardSeq());
 		// 데이터가 없는경우
