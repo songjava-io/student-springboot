@@ -10,3 +10,9 @@ spring:
     prefix: classpath:templates/
     suffix: .html
     cache: false
+# mybatis 설정
+mybatis:
+  mapper-locations:
+  - classpath:config/mapper/Board.xml
+  configuration:
+    map-underscore-to-camel-case: true
