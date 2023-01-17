@@ -6,16 +6,22 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import kr.songjava.web.domain.Board;
+import kr.songjava.web.exception.ApiException;
 import kr.songjava.web.service.BoardService;
 import lombok.RequiredArgsConstructor;
 
@@ -28,13 +34,26 @@ public class BoardController {
 
 	private final BoardService boardService;
 	
+	@ExceptionHandler(ApiException.class)
+	public ModelAndView handleApiException(ApiException e) {
+		logger.error("BoardController.handleApiException", e);
+		ModelAndView model = new ModelAndView("/board/api-error.html");
+		model.addObject("message", e.getMessage());
+		return model;
+	}
+	
 	@GetMapping
 	public String list(Model model,
 			@RequestParam(required = false) String query) 
 			throws Exception {
 		logger.info("BoardController list 실행...");
 		// 검색조건 파라메터
-
+		if (query != null && query.equals("test")) {
+			throw new RuntimeException("테스트 문자열을 허용이 되지 않습니다.");
+		}
+		if (query != null && query.equals("api")) {
+			throw new ApiException("API 문자열은 허용이 되지 않습니다.");
+		}
 		Map<String, Object> paramMap = new HashMap<>();
 		
 		paramMap.put("query", query);
@@ -108,6 +127,14 @@ public class BoardController {
 		return "redirect:/board";
 	}
 	
-	
+	/**
+	 * 게시물 삭제 기능 처리.
+	 */
+	@PostMapping("/delete")
+	@ResponseBody
+	public HttpEntity<Boolean> delete(@RequestParam int boardSeq) {
+		boardService.delete(boardSeq);
+		return ResponseEntity.ok(true);
+	}
 
 }

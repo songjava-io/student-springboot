@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import kr.songjava.web.domain.Board;
 import kr.songjava.web.mapper.BoardMapper;
@@ -46,6 +47,17 @@ public class BoardService {
 		// 게시물 업데이트 쿼리 수행
 		boardMapper.updateBoard(board);
 		return false;
+	}
+	
+	/**
+	 * 게시물 삭제 처리.
+	 * @param boardSeq
+	 */
+	public void delete(int boardSeq) {
+		// 게시물 번호로 조회하여 데이가 있는지
+		Board selectBoard = selectBoard(boardSeq);
+		Assert.notNull(selectBoard, "게시글이 존재하지 않습니다.");
+		boardMapper.deleteBoard(boardSeq);
 	}
 	
 	
