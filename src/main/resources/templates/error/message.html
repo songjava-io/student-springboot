@@ -4,8 +4,13 @@
 </head>
 <body>
 	<script th:inline="javascript">
+	var field = [[${field}]];
 	var message = [[${message}]];
-	alert('[Advice] ' + message);
+	if (field != null && field.length > 0) {
+		alert(field + ' : ' + message);
+	} else {
+		alert('[Advice] ' + message);
+	}
 	history.back();
 	</script>
 </body>

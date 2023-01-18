@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,12 +23,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import kr.songjava.web.domain.Board;
 import kr.songjava.web.exception.ApiException;
+import kr.songjava.web.form.BoardSaveForm;
 import kr.songjava.web.service.BoardService;
 import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequestMapping("/board")
 @RequiredArgsConstructor
+@Validated
 public class BoardController {
 	
 	final Logger logger = LoggerFactory.getLogger(getClass());
@@ -44,7 +47,7 @@ public class BoardController {
 	
 	@GetMapping
 	public String list(Model model,
-			@RequestParam(required = false) String query) 
+			/*@Length(min = 2, max = 5)*/ @RequestParam(required = false) String query) 
 			throws Exception {
 		logger.info("BoardController list 실행...");
 		// 검색조건 파라메터
@@ -53,6 +56,9 @@ public class BoardController {
 		}
 		if (query != null && query.equals("api")) {
 			throw new ApiException("API 문자열은 허용이 되지 않습니다.");
+		}
+		if (query != null && query.equals("spring")) {
+			throw new Exception("spring 문자열은 허용이 되지 않습니다.");
 		}
 		Map<String, Object> paramMap = new HashMap<>();
 		
@@ -100,10 +106,16 @@ public class BoardController {
 	 * 게시물 저장기능
 	 */
 	@PostMapping("/save")
-	public String save(Board board) {
-		// 기본 검증로직
+	public String save(@Validated BoardSaveForm form) {
+		/*
 		Assert.hasLength(board.getTitle(), "제목은 필수 입니다.");
 		Assert.hasLength(board.getContents(), "내용은 필수 입니다.");
+		*/
+		// form -> Board 도메인으로 데이터 set 후 build
+		Board board = Board.builder()
+			.title(form.getTitle())
+			.contents(form.getContents())
+			.build();
 		// 게시물 저장
 		boardService.save(board);
 		// 목록 페이지로 이동
@@ -114,15 +126,23 @@ public class BoardController {
 	 * 게시물 업데이트 기능 처리.
 	 */
 	@PostMapping("/update")
-	public String update(Board form) {
+	public String update(@Validated Board form) {
 		// 기본 검증로직
-		Board board = boardService.selectBoard(form.getBoardSeq());
-		Assert.notNull(board, "게시글 정보가 없습니다.");
-		
+		Board selectBoard = boardService.selectBoard(form.getBoardSeq());
+		Assert.notNull(selectBoard, "게시글 정보가 없습니다.");
+		/*
 		Assert.hasLength(form.getTitle(), "제목은 필수 입니다.");
 		Assert.hasLength(form.getContents(), "내용은 필수 입니다.");
+		*/
+		// form -> Board 도메인으로 데이터 set 후 build
+		Board board = Board.builder()
+			.title(form.getTitle())
+			.contents(form.getContents())
+			.boardSeq(form.getBoardSeq())
+			.build();
+		
 		// 게시물 저장
-		boardService.save(form);
+		boardService.save(board);
 		// 목록 페이지로 이동
 		return "redirect:/board";
 	}

@@ -1,3 +1,7 @@
+server:
+  error:
+    path: /error-custom
+
 spring:
   # 데이터베이스 접속정보 설정
   datasource:

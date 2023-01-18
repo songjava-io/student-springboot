@@ -4,6 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
@@ -20,6 +22,30 @@ public class BasicControllerAdvice {
 	
 	private final MappingJackson2JsonView jsonView;
 
+	@ExceptionHandler(BindException.class)
+	public ModelAndView handleBindException(BindException e, HttpServletRequest request) {
+		log.error("handleBindException", e);
+		String requested = request.getHeader("X-Requested-With");
+	
+		if (requested != null && requested.equals("XMLHttpRequest")) {
+			//ModelAndView model = new ModelAndView(jsonView);
+			ModelAndView model = new ModelAndView("jsonView", HttpStatus.BAD_REQUEST);
+			model.addObject("message", e.getMessage());
+			return model;
+		}
+		
+		FieldError fieldError = e.getFieldError();
+		
+		log.info("fieldError : {}", fieldError);
+		
+		ModelAndView model = new ModelAndView("/error/message.html");
+		model.addObject("message", fieldError.getDefaultMessage());
+		model.addObject("field", fieldError.getField());
+		
+		return model;
+	}
+	
+	
 	@ExceptionHandler(RuntimeException.class)
 	public ModelAndView handleRuntimeException(RuntimeException e, HttpServletRequest request) {
 		log.error("handleRuntimeException", e);
