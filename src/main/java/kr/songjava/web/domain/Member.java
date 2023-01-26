@@ -1,12 +1,11 @@
 package kr.songjava.web.domain;
 
-import lombok.AccessLevel;
+import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Data
 @AllArgsConstructor
@@ -14,14 +13,10 @@ import lombok.Setter;
 @Builder
 public class Member {
 
-	private String name;
-	private String age;
-	
-	@Setter(value = AccessLevel.NONE)
-	private String ci;
-	
-	@Getter(value = AccessLevel.NONE)
-	private String di;
-	
+	private int memberSeq;
+	private String account;
+	private String password;
+	private String nickname;
+	private Date joinDate;
 	
 }
