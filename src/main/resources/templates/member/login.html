@@ -3,7 +3,7 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default-layout}">
 	<th:block layout:fragment="content">
-		<form id="member-form" action="/member/save" method="post">
+		<form id="member-form" action="/member/login" method="post">
 			<div class="mb-3">
 				<label for="account" class="form-label">계정</label>
 				<input type="text" class="form-control"
@@ -16,13 +16,7 @@
 					name="password" id="password"
 					placeholder="비밀번호">
 			</div>
-			<div class="mb-3">
-				<label for="nickname" class="form-label">닉네임</label>
-				<input type="text" class="form-control"
-					name="nickname" id="nickname"
-					placeholder="닉네임">
-			</div>						
-			<button type="submit" class="btn btn-primary">등록하기</button>
+			<button type="submit" class="btn btn-primary">로그인</button>
 		</form>
 	</th:block>
 	<th:block layout:fragment="script">
@@ -39,11 +33,11 @@
 					data: {
 						account: $form.find('input[name=account]').val(),
 						password: $form.find('input[name=password]').val(),
-						nickname: $form.find('input[name=nickname]').val(),
 					},
 					success: function(data) {
 						console.log(data);
-						location.href = '/member/join-complete';
+						alert('로그인을 성공하였습니다.');
+						location.href = '/';
 					},
 					error: function(data) {
 						alert(data.responseJSON.message);

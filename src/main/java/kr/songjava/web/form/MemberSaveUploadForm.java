@@ -6,21 +6,23 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
+import org.springframework.web.multipart.MultipartFile;
 
 import kr.songjava.web.validation.ValidationSteps;
 import lombok.Data;
 
 @Data
 @GroupSequence({
-	MemberSaveForm.class,
+	MemberSaveUploadForm.class,
 	ValidationSteps.Step1.class,
 	ValidationSteps.Step2.class,
 	ValidationSteps.Step3.class,
 	ValidationSteps.Step4.class,
 	ValidationSteps.Step5.class,
 	ValidationSteps.Step6.class,
+	ValidationSteps.Step7.class,
 })
-public class MemberSaveForm {
+public class MemberSaveUploadForm {
 
 	@NotEmpty(groups = ValidationSteps.Step1.class, 
 		message = "{MemberSaveForm.account.NotEmpty}")
@@ -39,6 +41,12 @@ public class MemberSaveForm {
 	@Length(min = 2, max = 10, groups = ValidationSteps.Step6.class, 
 		message = "{MemberSaveForm.nickname.Length}")		
 	private String nickname;
+	
+	/*
+	@NotEmpty(groups = ValidationSteps.Step7.class, 
+			message = "{MemberSaveForm.profileImage.NotEmpty}")
+	*/
+	private MultipartFile profileImage;
 	
 	
 }

@@ -17,6 +17,8 @@ public class Member {
 	private String account;
 	private String password;
 	private String nickname;
+	private String profileImagePath;
+	private String profileImageName;
 	private Date joinDate;
 	
 }
