@@ -1,0 +1,13 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+</head>
+<body>
+	<script th:inline="javascript">
+	var message = [[${message}]];
+	alert('500 : ' + message);
+	history.back();
+	</script>
+</body>
+</html>

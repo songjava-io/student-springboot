@@ -1,0 +1,34 @@
+spring:
+  # DataBase 연결정보 set
+  datasource:
+    username: root
+    password: 1234
+    url: jdbc:mariadb://localhost:3306/profile
+    driver-class-name: org.mariadb.jdbc.Driver
+  # ViewTemplate thymeleaf 설정 set
+  thymeleaf:
+    prefix: classpath:templates/
+    suffix: .html
+    cache: false
+    
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 50MB
+      location: /fileupload
+      max-request-size: 50MB
+
+# mybatis 설정   
+mybatis:
+  mapper-locations:
+  - classpath:config/mapper/**.xml
+  configuration:
+    # snake_case -> camelCase 적용
+    map-underscore-to-camel-case: true
+    
+# 파일 환경설정 정보
+file:
+  root-path: /fileupload
+  
+logging:
+  config: classpath:config/logback.xml

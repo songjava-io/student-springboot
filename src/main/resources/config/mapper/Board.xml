@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.mapper.BoardMapper">
+
+	<!-- 게시물 목록 쿼리 -->
+	<select id="selectBoardList" resultType="com.example.domain.Board">
+		SELECT BOARD_SEQ, BOARD_TYPE, TITLE, REG_DATE 
+		FROM T_BOARD
+		ORDER BY REG_DATE DESC
+	</select>
+	
+	<!-- 게시물 상세 쿼리 1:1 데이터 조회 -->
+	<select id="selectBoard" parameterType="int" resultType="com.example.domain.Board">
+		SELECT 
+			BOARD_SEQ, BOARD_TYPE, TITLE, CONTENTS, USER_NAME, REG_DATE 
+		FROM T_BOARD
+		WHERE BOARD_SEQ = #{boardSeq}
+	</select>	
+	
+	<!-- 게시물 등록 쿼리 -->
+	<insert id="insertBoard" parameterType="com.example.domain.Board">
+		INSERT INTO T_BOARD
+		(
+			BOARD_TYPE,
+			TITLE,
+			CONTENTS,
+			USER_NAME,
+			REG_DATE		
+		)
+		VALUES
+		(
+			#{boardType},
+			#{title},
+			#{contents},
+			#{userName},
+			NOW()	
+		)
+	</insert>
+	
+	<!-- 게시물 업데이트 쿼리 -->
+	<update id="updateBoard" parameterType="com.example.domain.Board">
+		UPDATE T_BOARD
+		SET
+			BOARD_TYPE = #{boardType},
+			TITLE = #{title},
+			CONTENTS = #{contents},
+			USER_NAME = #{userName}
+		WHERE BOARD_SEQ = #{boardSeq}
+	</update>	
+	
+	<!-- 게시물 삭제 쿼리 -->
+	<delete id="deleteBoard" parameterType="int">
+		DELETE FROM T_BOARD
+		WHERE BOARD_SEQ = #{boardSeq}
+	</delete>
+	
+</mapper>

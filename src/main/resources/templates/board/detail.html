@@ -1,0 +1,48 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/default-layout}">
+	<th:block layout:fragment="css">
+	</th:block>
+	<th:block layout:fragment="content">
+		<div class="container">
+			<div class="card" style="width: 18rem;">
+			  <img src="..." class="card-img-top" alt="...">
+			  <div class="card-body">
+			    <h5 class="card-title" th:text="${board.title}">이름</h5>
+			    <h5 class="card-title" th:text="'회원 이름 : ' + ${board.userName}"></h5>
+			    <p class="card-text" th:text="${board.contents}">내용이다..</p>
+			    <a href="javascript:;" class="btn btn-primary" th:text="${board.regDate}">2012-12-30</a>
+			  </div>
+			</div>		
+			<a href="/board" class="btn btn-primary mt-5">목록</a>
+			<a th:href="@{/board/edit/{boardSeq}(boardSeq=${board.boardSeq})}" class="btn btn-primary mt-5">수정</a>
+			<a href="javascript:handleDelete();" class="btn btn-primary mt-5">삭제</a>
+		</div>
+	</th:block>
+	<!-- index.html 고유 스크립트 추가 -->
+	<th:block layout:fragment="script">
+		<script th:inline="javascript">
+		var boardSeq = [[${board.boardSeq}]];
+		function handleDelete(url) {
+			if (confirm('정말 삭제하시겠습니까?')) {
+				$.ajax({
+					url: '/board/delete',
+					type: 'post',
+					data: {
+						boardSeq: boardSeq,
+					},
+					success: function(data) {
+						alert('게시글이 삭제되었습니다.');
+						location.href = '/board';
+					},
+					error: function() {
+						alert('게시글 삭제가 실패하였습니다.');
+					}
+				});
+			}
+		}
+		</script>
+	</th:block>		
+</body>
+</html>
