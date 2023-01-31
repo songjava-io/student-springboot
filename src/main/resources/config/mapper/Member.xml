@@ -10,6 +10,17 @@
 		FROM T_MEMBER
 		WHERE ACCOUNT = #{account}
 	</select>
+	
+	<!-- 회원 아이디로 조회 (Security 인증 전용) -->
+	<select id="selectMemberAccount" parameterType="String" 
+		resultType="kr.songjava.web.domain.Member">
+		SELECT 
+			MEMBER_SEQ,
+			PASSWORD,
+			NICKNAME
+		FROM T_MEMBER
+		WHERE ACCOUNT = #{account}
+	</select>	
 
 	<insert id="insertMember" parameterType="kr.songjava.web.domain.Member"
 		useGeneratedKeys="true" keyProperty="memberSeq">

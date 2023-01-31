@@ -21,7 +21,10 @@ spring:
       max-file-size: 50MB
       max-request-size: 100MB
       location: /spring-boot-fileupload-temp
-        
+  #security:
+    #user:
+      #name: test
+      #password: test1234@@
 # mybatis 설정
 mybatis:
   mapper-locations:

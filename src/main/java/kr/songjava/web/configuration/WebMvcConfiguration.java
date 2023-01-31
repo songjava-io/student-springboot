@@ -11,6 +11,8 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
+import kr.songjava.web.error.CustomErrorAttributes;
+
 @Configuration
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
@@ -39,5 +41,9 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 		return factory;
 	}
 	
+	@Bean
+	public CustomErrorAttributes customErrorAttributes() {
+		return new CustomErrorAttributes();
+	}
 	
 }

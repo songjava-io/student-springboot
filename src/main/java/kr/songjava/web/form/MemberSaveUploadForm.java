@@ -9,6 +9,7 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.songjava.web.validation.ValidationSteps;
+import kr.songjava.web.validation.annotation.NotEmptyMultipartFile;
 import lombok.Data;
 
 @Data
@@ -42,10 +43,8 @@ public class MemberSaveUploadForm {
 		message = "{MemberSaveForm.nickname.Length}")		
 	private String nickname;
 	
-	/*
-	@NotEmpty(groups = ValidationSteps.Step7.class, 
+	@NotEmptyMultipartFile(groups = ValidationSteps.Step7.class, 
 			message = "{MemberSaveForm.profileImage.NotEmpty}")
-	*/
 	private MultipartFile profileImage;
 	
 	
