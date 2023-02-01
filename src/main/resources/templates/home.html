@@ -1,37 +1,9 @@
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
+<head></head>
+<body>
+	<p>Hello World.</p>
+	<p >로그인 회원 아이디 : [[${details.username}]]</p>
+	<p >로그인 회원 닉네임 : [[${details.nickname}]]</p>
+</body>
 
-	<body>
-		<p>나의 나이는 [[${age}]]</p>
-		<!-- 조건식 -->
-		<p th:if="${display}">저의 이름은 송영문 입니다.</p>
-		<p th:unless="${display}">저의 이름은 손흥민 입니다.</p>
-		<!-- 반복문 -->
-		<ul>
-			<li th:each="framework : ${frameworks}" 
-				th:text="${framework}">JAVA</li>
-		</ul>
-		
-		<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
-		<script th:inline="javascript">
-		$(function() {
-			$.ajax({
-				url: '/board',
-				type: 'get',
-				data: {
-					query: 'test'
-				},
-				success: function(data) {
-					console.log('success.');
-					console.log(data);
-				},
-				error: function(data) {
-					console.log('error.');
-					console.log(data);
-					alert('오류가 발생하였습니다.');
-				}
-			});			
-		});
-		</script>		
-	</body>
-	
 </html>

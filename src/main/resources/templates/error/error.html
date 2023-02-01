@@ -5,8 +5,8 @@
 </head>
 <body>
 	<script th:inline="javascript">
-	var message = [[${message}]];
-	alert('500 : ' + message);
+	var message = [[${exception.message}]];
+	alert('error.html : ' + message);
 	history.back();
 	</script>
 </body>
