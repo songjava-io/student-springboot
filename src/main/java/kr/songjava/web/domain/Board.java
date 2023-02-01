@@ -14,6 +14,7 @@ public class Board {
 	private int boardSeq;
 	private String title;
 	private String contents;
+	private int memberSeq;
 	private String regDate;
 	
 }

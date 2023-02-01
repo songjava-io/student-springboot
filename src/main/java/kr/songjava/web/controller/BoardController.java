@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
@@ -24,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import kr.songjava.web.domain.Board;
 import kr.songjava.web.exception.ApiException;
 import kr.songjava.web.form.BoardSaveForm;
+import kr.songjava.web.security.userdetails.SecurityUserDetails;
 import kr.songjava.web.service.BoardService;
 import lombok.RequiredArgsConstructor;
 
@@ -97,7 +99,6 @@ public class BoardController {
 	@GetMapping("/edit/{boardSeq}")
 	public String edit(Model model, @PathVariable int boardSeq) {
 		Board board = boardService.selectBoard(boardSeq);
-		Assert.notNull(board, "게시글 정보가 없습니다.");
 		model.addAttribute("board", board);
 		return "/board/form";
 	}
@@ -106,15 +107,20 @@ public class BoardController {
 	 * 게시물 저장기능
 	 */
 	@PostMapping("/save")
-	public String save(@Validated BoardSaveForm form) {
+	public String save(@Validated BoardSaveForm form, 
+			@AuthenticationPrincipal SecurityUserDetails user) {
 		/*
 		Assert.hasLength(board.getTitle(), "제목은 필수 입니다.");
 		Assert.hasLength(board.getContents(), "내용은 필수 입니다.");
 		*/
 		// form -> Board 도메인으로 데이터 set 후 build
+		
+		//SecurityUserDetails user = (SecurityUserDetails) authentication.getPrincipal();
+		
 		Board board = Board.builder()
 			.title(form.getTitle())
 			.contents(form.getContents())
+			.memberSeq(user.getMemberSeq())
 			.build();
 		// 게시물 저장
 		boardService.save(board);
@@ -126,10 +132,7 @@ public class BoardController {
 	 * 게시물 업데이트 기능 처리.
 	 */
 	@PostMapping("/update")
-	public String update(@Validated Board form) {
-		// 기본 검증로직
-		Board selectBoard = boardService.selectBoard(form.getBoardSeq());
-		Assert.notNull(selectBoard, "게시글 정보가 없습니다.");
+	public String update(@Validated BoardSaveForm form) {
 		/*
 		Assert.hasLength(form.getTitle(), "제목은 필수 입니다.");
 		Assert.hasLength(form.getContents(), "내용은 필수 입니다.");

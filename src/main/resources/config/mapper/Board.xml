@@ -26,6 +26,7 @@
 			BOARD_SEQ,
 			TITLE,
 			CONTENTS,
+			MEMBER_SEQ,
 			REG_DATE
 		FROM T_BOARD
 		WHERE BOARD_SEQ = #{boardSeq}
@@ -37,12 +38,14 @@
 		(
 			TITLE,
 			CONTENTS,
+			MEMBER_SEQ,
 			REG_DATE
 		)
 		VALUES
 		(
 			#{title},
 			#{contents},
+			#{memberSeq},
 			NOW()
 		)
 	</insert>
