@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import kr.songjava.web.domain.Board;
 import kr.songjava.web.exception.ApiException;
 import kr.songjava.web.form.BoardSaveForm;
+import kr.songjava.web.interceptor.RequestConfig;
 import kr.songjava.web.security.userdetails.SecurityUserDetails;
 import kr.songjava.web.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +49,7 @@ public class BoardController {
 	}
 	
 	@GetMapping
+	@RequestConfig(menu = "BOARD")
 	public String list(Model model,
 			/*@Length(min = 2, max = 5)*/ @RequestParam(required = false) String query) 
 			throws Exception {
@@ -78,6 +80,7 @@ public class BoardController {
 	 * 등록화면 
 	 */
 	@GetMapping("/{boardSeq}")
+	@RequestConfig(menu = "BOARD")
 	public String detail(Model model, @PathVariable int boardSeq) {
 		Board board = boardService.selectBoard(boardSeq);
 		Assert.notNull(board, "게시글 정보가 없습니다.");
@@ -89,6 +92,7 @@ public class BoardController {
 	 * 등록화면 
 	 */
 	@GetMapping("/form")
+	@RequestConfig(menu = "BOARD")
 	public void form() {
 		
 	}
@@ -97,6 +101,7 @@ public class BoardController {
 	 * 수정화면 
 	 */
 	@GetMapping("/edit/{boardSeq}")
+	@RequestConfig(menu = "BOARD")
 	public String edit(Model model, @PathVariable int boardSeq) {
 		Board board = boardService.selectBoard(boardSeq);
 		model.addAttribute("board", board);
@@ -107,6 +112,7 @@ public class BoardController {
 	 * 게시물 저장기능
 	 */
 	@PostMapping("/save")
+	@RequestConfig(menu = "BOARD")
 	public String save(@Validated BoardSaveForm form, 
 			@AuthenticationPrincipal SecurityUserDetails user) {
 		/*
@@ -132,6 +138,7 @@ public class BoardController {
 	 * 게시물 업데이트 기능 처리.
 	 */
 	@PostMapping("/update")
+	@RequestConfig(menu = "BOARD")
 	public String update(@Validated BoardSaveForm form) {
 		/*
 		Assert.hasLength(form.getTitle(), "제목은 필수 입니다.");
@@ -154,6 +161,7 @@ public class BoardController {
 	 * 게시물 삭제 기능 처리.
 	 */
 	@PostMapping("/delete")
+	@RequestConfig(menu = "BOARD")
 	@ResponseBody
 	public HttpEntity<Boolean> delete(@RequestParam int boardSeq) {
 		boardService.delete(boardSeq);

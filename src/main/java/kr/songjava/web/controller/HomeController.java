@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import kr.songjava.web.interceptor.RequestConfig;
 import kr.songjava.web.service.HomeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ public class HomeController {
 	private final HomeService homeService;
 	
 	@GetMapping(value = { "/", "/home", "/main " })
+	@RequestConfig(menu = "HOME")
 	public String home(Model model, Authentication authentication) {
 		log.info("authentication : {}", authentication);
 		if (authentication != null) {

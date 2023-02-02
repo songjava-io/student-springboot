@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,7 @@ import kr.songjava.web.domain.Member;
 import kr.songjava.web.exception.ApiException;
 import kr.songjava.web.form.MemberSaveForm;
 import kr.songjava.web.form.MemberSaveUploadForm;
+import kr.songjava.web.interceptor.RequestConfig;
 import kr.songjava.web.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,6 +49,7 @@ public class MemberController {
 	 * 회원 로그인 화면
 	 */
 	@GetMapping("/login")
+	@RequestConfig(menu = "MEMBER")
 	public void login() {
 	}
 	
@@ -53,6 +57,7 @@ public class MemberController {
 	 * 회원 정보 입력 화면
 	 */
 	@GetMapping("/form")
+	@RequestConfig(menu = "MEMBER")
 	public void form() {
 		
 	}
@@ -61,6 +66,7 @@ public class MemberController {
 	 * 회원 정보 입력 화면 (파일첨부 포함)
 	 */
 	@GetMapping("/form-upload")
+	@RequestConfig(menu = "MEMBER")
 	public void formUpload() {
 	}
 	
@@ -68,7 +74,19 @@ public class MemberController {
 	 * 회원 가입 완료 화면
 	 */
 	@GetMapping("/join-complete")
+	@RequestConfig(menu = "MEMBER")
 	public void joinComplete() {
+	}
+	
+	/**
+	 * 본인인증 성공 후 콜백 (데이터를 받는 역활)
+	 */
+	@GetMapping("/realname-callback")
+	@RequestConfig(menu = "MEMBER")
+	@ResponseBody
+	public String realnameCallback(HttpServletRequest request) {
+		request.getSession().setAttribute("realnameCheck", true);
+		return "ok";
 	}
 	
 	/**
@@ -77,8 +95,9 @@ public class MemberController {
 	 * @return
 	 */
 	@PostMapping("/save")
+	@RequestConfig(menu = "MEMBER", realnameCheck = true)
 	@ResponseBody
-	public HttpEntity<Boolean> save(@Validated MemberSaveForm form) {
+	public HttpEntity<Boolean> save(HttpServletRequest request, @Validated MemberSaveForm form) {
 		log.info("form : {}", form);
 		log.info("nickname : {}", form.getNickname());
 		// 사용이 불가능 상태인경우
@@ -96,6 +115,8 @@ public class MemberController {
 			.build();
 		// 등록 처리
 		memberService.save(member);
+		// 본인인증 값이 세션에 필요가 없으므로 제거
+		request.getSession().removeAttribute("realnameCheck");
 		return ResponseEntity.ok(true);
 	}
 	
@@ -106,6 +127,7 @@ public class MemberController {
 	 * @return
 	 */
 	@PostMapping("/save-upload")
+	@RequestConfig(menu = "MEMBER", realnameCheck = true)
 	@ResponseBody
 	public HttpEntity<Boolean> saveUpload(@Validated MemberSaveUploadForm form) {
 		log.info("form : {}", form);
@@ -166,12 +188,6 @@ public class MemberController {
 		memberService.save(member);
 		return ResponseEntity.ok(true);
 	}
-	
-	
-	
-	
-	
-	
 	
 	
 }
