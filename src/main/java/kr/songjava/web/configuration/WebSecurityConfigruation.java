@@ -8,12 +8,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import kr.songjava.web.security.userdetails.DefaultAuthenticationSuccessHandler;
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfigruation {
 
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	public SecurityFilterChain securityFilterChain(HttpSecurity http,
+			DefaultAuthenticationSuccessHandler defaultAuthenticationSuccessHandler) throws Exception {
 		http.authorizeRequests()
 			// 해당 url 패턴은 로그인 권한없어도 접근되게
 			.antMatchers(
@@ -32,6 +35,7 @@ public class WebSecurityConfigruation {
 			.anyRequest().hasRole("USER").and()
 			//.csrf().disable()
 			.formLogin()
+			.successHandler(defaultAuthenticationSuccessHandler)
 			.permitAll();
 		return http.build();
 	}

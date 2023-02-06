@@ -50,6 +50,14 @@ public class MemberService implements UserDetailsService {
 		
 		memberMapper.insertMember(member);
 	}
+	
+	/**
+	 * 회원 로그인 일자 업데이트
+	 * @param memberSeq
+	 */
+	public void updateLoginDate(int memberSeq) {
+		memberMapper.updateMemberLoginDate(memberSeq);
+	}
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

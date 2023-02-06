@@ -44,6 +44,14 @@
 		)
 	</insert>
 	
+	<!-- 회원 로그인 일자 업데이트 -->
+	<update id="updateMemberLoginDate" parameterType="int">
+		UPDATE T_MEMBER
+		SET
+			LOGIN_DATE = NOW()
+		WHERE MEMBER_SEQ = #{memberSeq}
+	</update>
+	
 </mapper>
 
 

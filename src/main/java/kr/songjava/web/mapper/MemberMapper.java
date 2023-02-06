@@ -10,4 +10,6 @@ public interface MemberMapper {
 
 	Member selectMemberAccount(String account);
 	
+	void updateMemberLoginDate(int memberSeq);
+	
 }
